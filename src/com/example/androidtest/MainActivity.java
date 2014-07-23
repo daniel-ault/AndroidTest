@@ -1,5 +1,7 @@
 package com.example.androidtest;
 
+import java.text.DateFormat.Field;
+
 import android.support.v7.app.ActionBarActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
@@ -20,6 +23,21 @@ public class MainActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_main);
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		
+		//adds the menu button to the action bar even if the device
+		//has a physical menu button
+		try {
+		  ViewConfiguration config = ViewConfiguration.get(this);
+		  java.lang.reflect.Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+
+		  if (menuKeyField != null) {
+		    menuKeyField.setAccessible(true);
+		    menuKeyField.setBoolean(config, false);
+		  }
+		}
+		catch (Exception e) {
+		  // presumably, not relevant
+		}
 	}
 
 	@Override
