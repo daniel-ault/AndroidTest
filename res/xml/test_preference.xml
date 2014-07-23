@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <CheckBoxPreference android:title="Banana2" android:key="checkboxBanana"/>
+    <EditTextPreference android:title="Edit Text" android:key="editTextPreference"/>
+    <PreferenceScreen android:title="Section 1" android:key="preferenceScreen1">
+        <CheckBoxPreference android:title="woot" android:key="checkboxWoot"/>
+        <CheckBoxPreference android:title="test" android:key="checkboxTest"/>
+    </PreferenceScreen>
+    <PreferenceScreen android:title="Section 2" android:key="preferenceScreen2">
+        <CheckBoxPreference android:title="No" android:key="checkboxNo"/>
+        <CheckBoxPreference android:title="Yes?" android:key="checkboxYes"/>
+    </PreferenceScreen>
+
+</PreferenceScreen>
