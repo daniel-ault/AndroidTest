@@ -2,6 +2,9 @@ package com.example.androidtest;
 
 import java.text.DateFormat.Field;
 
+import com.example.RunningTracker.RunRoute;
+import com.example.RunningTracker.RunningTracker;
+
 import android.support.v7.app.ActionBarActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -85,11 +88,16 @@ public class MainActivity extends ActionBarActivity {
     	preferences += editTextPreference + "\n" + checkboxWoot + "\n" + checkboxTest + "\n";
     	preferences += checkboxNo + "\n" + checkboxYes;
     	
-    	shortToast(preferences);
+    	//shortToast(preferences);
+    	
+    	RunRoute route = RunningTracker.createRoute();
+    	
+    	//shortToast(route.toString());
     	
     	
     	Intent intent = new Intent(MainActivity.this, TestActivity.class);
     	startActivity(intent);
+    	overridePendingTransition(0,0);
     	
 	}
 	
