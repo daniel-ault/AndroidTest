@@ -272,6 +272,8 @@ int id image 0x7f060027
 int id listMode 0x7f060001
 int id list_item 0x7f060029
 int id listview 0x7f06003d
+int id menu_list_nope 0x7f060044
+int id menu_list_save 0x7f060043
 int id middle 0x7f060012
 int id middletext 0x7f06003f
 int id never 0x7f060009
@@ -334,6 +336,7 @@ int layout list_row 0x7f03001a
 int layout support_simple_spinner_dropdown_item 0x7f03001b
 int layout test 0x7f03001c
 int menu main 0x7f0d0000
+int menu menu_list 0x7f0d0001
 int string abc_action_bar_home_description 0x7f0b0001
 int string abc_action_bar_up_description 0x7f0b0002
 int string abc_action_menu_overflow_description 0x7f0b0003

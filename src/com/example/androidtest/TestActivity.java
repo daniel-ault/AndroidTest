@@ -1,5 +1,8 @@
 package com.example.androidtest;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,20 +15,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class TestActivity extends Activity {
-
+public class TestActivity extends ActionBarActivity {
+	static final String LOG_TAG = "TestActivity";
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -102,7 +109,7 @@ public class TestActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.menu_list, menu);
 		return true;
 	}
 
@@ -112,19 +119,60 @@ public class TestActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			settingsClick();
+		if (id == R.id.menu_list_save) {
+			menuSave();
+			return true;
+		}
+		else if (id == R.id.menu_list_nope) {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void settingsClick() {
-		shortToast("WOOT");
+	public void menuSave() {
+		if (isExternalStorageReadable() == false) {
+			shortToast("No external storage detected.");
+			return;
+		}
+		shortToast("Saving file to sdcard...");
+		File testFile = makeFolder("testFile");
 		
-		Intent intent = new Intent(this, SettingsActivity.class);
-		startActivity(intent);
+		String filename = testFile.getAbsolutePath() + "/test.csv";
 		
+		try {
+			RunningTracker.createRoute().saveToCSV(filename);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public boolean isExternalStorageWritable() {
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isExternalStorageReadable() {
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state) || 
+			Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public File makeFolder(String filename) {
+		File file = new File(Environment.getExternalStoragePublicDirectory(
+				""), filename);
+		if (!file.mkdirs()) {
+			Log.e(LOG_TAG, "Directory not created.");
+		}
+		return file;
 	}
 
 /*

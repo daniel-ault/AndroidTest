@@ -1117,6 +1117,8 @@ containing a value of this type.
         public static final int listMode=0x7f060001;
         public static final int list_item=0x7f060029;
         public static final int listview=0x7f06003d;
+        public static final int menu_list_nope=0x7f060044;
+        public static final int menu_list_save=0x7f060043;
         public static final int middle=0x7f060012;
         public static final int middletext=0x7f06003f;
         public static final int never=0x7f060009;
@@ -1207,6 +1209,7 @@ containing a value of this type.
     }
     public static final class menu {
         public static final int main=0x7f0d0000;
+        public static final int menu_list=0x7f0d0001;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 

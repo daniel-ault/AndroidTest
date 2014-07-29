@@ -6,8 +6,12 @@
 
 package com.example.RunningTracker;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  *
@@ -74,6 +78,67 @@ public class RunRoute {
     }
     
     public ArrayList<Checkpoint> getCheckpointArrayList() { return (ArrayList<Checkpoint>)routeList; }
+    
+    public void saveToCSV(File file) throws FileNotFoundException {
+    	String filename = file.getAbsolutePath();
+    	saveToCSV(filename);
+    }
+    
+    public void saveToCSV(String filename) throws FileNotFoundException {
+    	String s = "intersection,distanceFromStart,paceGoal\n";//,goalTime,time\n";
+    	
+    	boolean paceGoalWritten = false;
+    	
+    	for (Checkpoint checkpoint : this.routeList) {
+    		s += checkpoint.getIntersection() +",";
+    		s += checkpoint.getDistanceFromStart() + ",";
+    		//makes sure pace goal is only written once
+    		if (!paceGoalWritten) {
+    			s += paceGoal + "\n";
+    			paceGoalWritten = true;
+    		}
+    		else 
+    			s += "\n";
+    		//s += checkpoint.getGoalTime() + ",\n";
+    	}
+    	
+    	PrintWriter out = new PrintWriter(filename);
+    	out.println(s);
+    	out.close();
+    }
+    
+    public static RunRoute loadFromCSV(String filename) throws FileNotFoundException {
+    	Scanner scanner = new Scanner(new File(filename));
+    	
+    	scanner.nextLine();
+    	double paceGoal = 0;
+    	
+    	RunRoute route = new RunRoute();
+    	
+    	while (scanner.hasNext()) {
+    		Scanner nextLine = new Scanner(scanner.nextLine());
+    		
+                nextLine.useDelimiter(",");
+                
+    		String intersection = nextLine.next();
+    		double distanceFromStart = Double.parseDouble(nextLine.next());
+    		
+    		if (paceGoal == 0) {
+    			paceGoal = Double.parseDouble(nextLine.next());
+    			route.setGoalPace(paceGoal);
+    		}
+    		
+                
+                if (distanceFromStart == 0) {
+                    route.setStart(intersection);
+                }
+                else {
+                    route.addCheckpoint(intersection, distanceFromStart);
+                }
+    	}
+    	
+    	return route;
+    }
     
     public String toString() {
         String s = "";
