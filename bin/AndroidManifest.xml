@@ -29,7 +29,11 @@
             android:name=".SettingsActivity"
             android:label="Test your face" >
         </activity>
-        <activity android:name="TestActivity" android:parentActivityName=".MainActivity"></activity>
+        <activity 
+            android:name="TestActivity" 
+            android:parentActivityName=".MainActivity">
+        </activity>
+        <activity android:name="RouteCreateActivity"></activity>
     </application>
 
 </manifest>

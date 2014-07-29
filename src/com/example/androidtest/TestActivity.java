@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.example.RunningTracker.Checkpoint;
+import com.example.RunningTracker.RunRoute;
 import com.example.RunningTracker.RunningTracker;
 
 import android.app.Activity;
@@ -30,13 +31,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class TestActivity extends ActionBarActivity {
+public class TestActivity extends ActionBarActivity  implements OnItemClickListener {
 	static final String LOG_TAG = "TestActivity";
+	
+	private String[] stringList;
+	private ListAdapter listAdapter;
+	private ListView listView;
+	private RunRoute route = RunningTracker.createRoute();
+	
+	private Bundle savedInstanceState;
 	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+	    this.savedInstanceState = savedInstanceState;
 	    setContentView(R.layout.list);
 	    
 	    /*
@@ -46,6 +55,7 @@ public class TestActivity extends ActionBarActivity {
 	    		*/
 	    
 	    String[] stringList = RunningTracker.createRoute().getStringList();
+	    this.stringList = stringList;
 	    /*
 	    final ArrayAdapter adapter = new ArrayAdapter<String>(this,
 	    		android.R.layout.simple_list_item_activated_1, stringList);
@@ -56,31 +66,56 @@ public class TestActivity extends ActionBarActivity {
 	    		R.layout.list_row, stringList);
 	    */
 	    
-	    ListAdapter adapter = new ListAdapter(this, R.layout.list_row, RunningTracker.createRoute().getCheckpointArrayList());
+	    ListAdapter adapter = new ListAdapter(this, R.layout.list_row, 
+	    		RunningTracker.createRoute().getCheckpointArrayList(),
+	    		RunningTracker.createRoute());
+	    this.listAdapter = adapter;
 	    
-	    ListView listView = (ListView)findViewById(R.id.listview);
-	    listView.setAdapter(adapter);
+	    listView = (ListView)findViewById(R.id.listview);
+	    listView.setAdapter(listAdapter);
 	    listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+	    listView.setOnItemClickListener(this);
 	    
+	    /*
 	    listView.setOnItemClickListener(new OnItemClickListener() {
 	    	@Override
 	    	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 	    		//item clicked
 	    		
-	    		
+	    		shortToast(String.valueOf(position));
 	    	}
 	    });
+	    */
 	    
+	    
+	}
+	
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		// TODO Auto-generated method stub
+		//shortToast(String.valueOf(this.listAdapter.items.size()));
+		//shortToast(route.toString());
+		if (position+1 != route.getCheckpointArrayList().size()) {
+			return;
+		}
+		route.addCheckpoint("test", position+1);
+		listAdapter.clear();
+		listAdapter.addAll(route.getCheckpointArrayList());
+		listAdapter.notifyDataSetChanged();
 	}
 	
 	public class ListAdapter extends ArrayAdapter<Checkpoint> {
 
 	    private ArrayList<Checkpoint> items;
+	    //private RunRoute route;
 
-	    public ListAdapter(Context context, int textViewResourceId, ArrayList<Checkpoint> items) {
+	    public ListAdapter(Context context, int textViewResourceId, ArrayList<Checkpoint> items,
+	    		RunRoute route) {
 	            super(context, textViewResourceId, items);
 	            this.items = items;
+	            //this.route = route;
 	    }
+	    
 	    @Override
 	    public View getView(int position, View convertView, ViewGroup parent) {
 	            View v = convertView;
@@ -104,6 +139,9 @@ public class TestActivity extends ActionBarActivity {
 	            }
 	            return v;
 	    }
+	    
+	    public int getSize() { return items.size(); }
+	    
 	}
 	
 	@Override
@@ -145,8 +183,6 @@ public class TestActivity extends ActionBarActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 	}
 	
 	public boolean isExternalStorageWritable() {
@@ -251,4 +287,5 @@ public class TestActivity extends ActionBarActivity {
 		Toast toast = Toast.makeText(context, text,  duration);
 		toast.show();
 	}
+
 }
