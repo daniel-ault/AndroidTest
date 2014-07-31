@@ -23,7 +23,7 @@ public class RunRoute {
     private double paceActual;
     private double routeLength = 0;
     
-    RunRoute() { }
+    public RunRoute() { }
     
     public void setStart(String intersection) {
         if (routeList.isEmpty()) {

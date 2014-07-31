@@ -2,34 +2,33 @@ package com.example.androidtest;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
-import com.example.RunningTracker.Checkpoint;
-import com.example.RunningTracker.RunRoute;
-import com.example.RunningTracker.RunningTracker;
-
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 import android.support.v7.app.ActionBarActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.RunningTracker.Checkpoint;
+import com.example.RunningTracker.RunRoute;
+import com.example.RunningTracker.RunningTracker;
 
 public class TestActivity extends ActionBarActivity  implements OnItemClickListener {
 	static final String LOG_TAG = "TestActivity";
@@ -158,24 +157,78 @@ public class TestActivity extends ActionBarActivity  implements OnItemClickListe
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.menu_list_save) {
-			menuSave();
+			
+			menuSaveDialog();
 			return true;
 		}
 		else if (id == R.id.menu_list_nope) {
+			menuAddCheckpointDialog();
+			//this.addItem("test banana", 50.1);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void menuSave() {
+	public void menuAddCheckpointDialog() {
+		LayoutInflater factory = LayoutInflater.from(this);
+		final View textEntryView = factory.inflate(R.layout.add_checkpoint_dialog, null);
+		
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		
+		alert.setTitle("Please enter info");
+		//alert.setMessage("ENTER INFO FOO");
+		
+		alert.setView(textEntryView);
+		AlertDialog loginPrompt = alert.create();
+		
+		final EditText input1 = (EditText)textEntryView.findViewById(R.id.editText1);
+		final EditText input2 = (EditText)textEntryView.findViewById(R.id.editText2);
+		
+		alert.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int whichButton) {
+				addItem(input1.getText().toString(), Double.valueOf(input2.getText().toString()));
+			}
+		});
+		alert.setNegativeButton("Cancel", null);
+		
+		alert.show();
+	}
+	
+	public void addItem(String intersection, double distanceFromStart) {
+		
+		route.addCheckpoint(intersection, distanceFromStart);
+		listAdapter.clear();
+		listAdapter.addAll(route.getCheckpointArrayList());
+		listAdapter.notifyDataSetChanged();
+	}
+	
+	private void menuSaveDialog() {
+		final EditText textTitle = new EditText(this);
+		textTitle.setInputType(InputType.TYPE_CLASS_TEXT);
+		Builder alert = new AlertDialog.Builder(this);
+		 
+		alert.setTitle("Save as...");
+		alert.setView(textTitle);
+		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				menuSave(textTitle.getText().toString());
+			}
+		});
+		alert.setNegativeButton("Cancel", null);
+		alert.show();
+	}
+	
+	public void menuSave(String title) {
 		if (isExternalStorageReadable() == false) {
 			shortToast("No external storage detected.");
 			return;
 		}
 		shortToast("Saving file to sdcard...");
-		File testFile = makeFolder("testFile");
+		File testFile = makeFolder("RunningTracker/saved");
 		
-		String filename = testFile.getAbsolutePath() + "/test.csv";
+		String filename = testFile.getAbsolutePath() + "/" + title + ".csv";
 		
 		try {
 			RunningTracker.createRoute().saveToCSV(filename);
