@@ -1,81 +1,87 @@
 package com.example.androidtest;
 
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.RunningTracker.RunRoute;
-
-
-public class RouteCreateActivity extends ListActivity {
-	
-	String[] stringList = new String[] { "Test 1", "Test 2", "Test 3",
-    		"Test 4", "Test 5", "Test 6", "Test 7", "Test 8", "Test 9",
-    		"Test 10", "Test 11", "Test 12", "Test 13", "Test 14", "Test 15"  };
-	
-	private RunRoute route;
+public class RouteCreateActivity extends RouteDisplayActivity {
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    setContentView(R.layout.list);
+	
 	    // TODO Auto-generated method stub
-	    
-	    route = new RunRoute();
-	    route.setStart("Test");
-	    
-	    ArrayAdapter adapter = new ArrayAdapter(this, R.layout.list_row, stringList);
-	    
 	}
-
+	
+	public void addItem(String intersection, double distanceFromStart) {
+		this.route.addCheckpoint(intersection, distanceFromStart);
+		//updateView();
+		listAdapter.clear();
+		listAdapter.addAll(route.getCheckpointArrayList());
+		listAdapter.notifyDataSetChanged();
+	}
+	
+	public void deleteItem(int position) throws IndexOutOfBoundsException {
+		route.deleteCheckpoint(position);
+	}
+	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.route_create, menu);
 		return true;
 	}
 	
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		//route.deleteCheckpoint(position);
+		//shortToast(route.toString());
+		shortToast(String.valueOf(position));
+		//updateView();
+	}
+	
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if (id == R.id.createAddCheckpoint) {
-			addCheckpoint();
+		if (id == R.id.menu_create_add_checkpoint) {
+			addCheckpointDialog();
 			return true;
 		}
-		else if (id == R.id.createSaveRoute) {
-			shortToast("Save Route");
+		else if (id == R.id.menu_create_save) {
+			shortToast(route.toString());
 			return true;
 		}
 		return false;
 	}
 	
-	public void addCheckpoint() {
-		final EditText txtUrl = new EditText(this);
-        txtUrl.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        Builder alert = new AlertDialog.Builder(this);
-        
-        alert.setTitle("Moustachify Link");
-        alert.setMessage("Paste in the link of an image to moustachify!");
-        alert.setView(txtUrl);    
-        alert.setPositiveButton("Moustachify", new DialogInterface.OnClickListener() {
-        	public void onClick(DialogInterface dialog, int whichButton) {
-        		String url = txtUrl.getText().toString();
-        	}
-        });
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-        	public void onClick(DialogInterface dialog, int whichButton) {
-        		shortToast("yay");
-        	}
-        });
-        alert.show();
-        
+	public void addCheckpointDialog() {
+		LayoutInflater factory = LayoutInflater.from(this);
+		final View textEntryView = factory.inflate(R.layout.add_checkpoint_dialog, null);
+		
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		
+		alert.setTitle("Add Checkpoint");
+		alert.setView(textEntryView);
+		
+		final EditText input1 = (EditText)textEntryView.findViewById(R.id.editText1);
+		final EditText input2 = (EditText)textEntryView.findViewById(R.id.editText2);
+		
+		alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				addItem(input1.getText().toString(), Double.valueOf(input2.getText().toString()));
+			}
+		});
+		
+		alert.setNegativeButton("Cancel", null);
+		
+		alert.show();
 	}
 	
 	public void shortToast(CharSequence text) {
@@ -84,5 +90,6 @@ public class RouteCreateActivity extends ListActivity {
     	
     	Toast toast = Toast.makeText(context, text,  duration);
     	toast.show();
-	}
+	}	
+	
 }

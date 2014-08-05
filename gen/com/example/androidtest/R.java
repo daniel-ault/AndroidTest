@@ -1102,8 +1102,6 @@ containing a value of this type.
         public static final int button1=0x7f06003c;
         public static final int checkbox=0x7f06002d;
         public static final int collapseActionView=0x7f06000d;
-        public static final int createAddCheckpoint=0x7f060048;
-        public static final int createSaveRoute=0x7f060049;
         public static final int default_activity_button=0x7f060028;
         public static final int dialog=0x7f06000e;
         public static final int disableHome=0x7f060008;
@@ -1122,6 +1120,8 @@ containing a value of this type.
         public static final int listMode=0x7f060001;
         public static final int list_item=0x7f060029;
         public static final int listview=0x7f060040;
+        public static final int menu_create_add_checkpoint=0x7f060048;
+        public static final int menu_create_save=0x7f060049;
         public static final int menu_list_nope=0x7f060047;
         public static final int menu_list_save=0x7f060046;
         public static final int middle=0x7f060012;

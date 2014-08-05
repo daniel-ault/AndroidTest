@@ -257,8 +257,6 @@ int id bottomtext 0x7f060043
 int id button1 0x7f06003c
 int id checkbox 0x7f06002d
 int id collapseActionView 0x7f06000d
-int id createAddCheckpoint 0x7f060048
-int id createSaveRoute 0x7f060049
 int id default_activity_button 0x7f060028
 int id dialog 0x7f06000e
 int id disableHome 0x7f060008
@@ -277,6 +275,8 @@ int id image 0x7f060027
 int id listMode 0x7f060001
 int id list_item 0x7f060029
 int id listview 0x7f060040
+int id menu_create_add_checkpoint 0x7f060048
+int id menu_create_save 0x7f060049
 int id menu_list_nope 0x7f060047
 int id menu_list_save 0x7f060046
 int id middle 0x7f060012

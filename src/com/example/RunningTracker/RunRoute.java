@@ -55,6 +55,11 @@ public class RunRoute {
         }
     }// addCheckpoint
     
+    
+    public void deleteCheckpoint(int position) throws IndexOutOfBoundsException {
+    	routeList.remove(position);
+    }
+    
     public void setGoalPace(double pace) {
         this.paceGoal = pace;
         
