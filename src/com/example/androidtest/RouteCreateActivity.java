@@ -24,10 +24,7 @@ public class RouteCreateActivity extends RouteDisplayActivity {
 	
 	public void addItem(String intersection, double distanceFromStart) {
 		this.route.addCheckpoint(intersection, distanceFromStart);
-		//updateView();
-		listAdapter.clear();
-		listAdapter.addAll(route.getCheckpointArrayList());
-		listAdapter.notifyDataSetChanged();
+		updateView();
 	}
 	
 	public void deleteItem(int position) throws IndexOutOfBoundsException {

@@ -82,7 +82,13 @@ public class RunRoute {
     	return s;
     }
     
-    public ArrayList<Checkpoint> getCheckpointArrayList() { return (ArrayList<Checkpoint>)routeList; }
+    public ArrayList<Checkpoint> getCheckpointArrayList() { 
+    	ArrayList<Checkpoint> list = new ArrayList<Checkpoint>();
+    	list.addAll(routeList);
+    	return list; 
+    }
+    
+    public void setCheckpointArrayList(ArrayList<Checkpoint> list) { routeList = list; }
     
     public void saveToCSV(File file) throws FileNotFoundException {
     	String filename = file.getAbsolutePath();
